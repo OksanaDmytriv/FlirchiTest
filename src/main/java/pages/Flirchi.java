@@ -3,8 +3,6 @@ package pages;
 import core.ConciseAPI;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.yandex.qatools.allure.annotations.Step;
 
 import static core.ConciseAPI.*;
@@ -13,21 +11,24 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.titleContains;
 public class Flirchi {
 
     @Step
-    public static void open(String URL) {
-        ConciseAPI.open(URL);
-    }
+    public static void recordingAnswer(String gender, String hair, int suffixForHair, String eye, int suffixForEye, String body){
+        ConciseAPI.open("https://flirchi.com/landing/inter?fr=1&p=1232");
+        $(byXpath(gender)).click();
+        $(byXpath(hair, suffixForHair)).click();
+        $(byXpath(eye, suffixForEye)).click();
+        $(byXpath(body)).click();}
 
     @Step
-    public static void signUp(String name, String email) {
+    public static void signUp(String name, String email, String gender, String age) {
         $(By.name("name")).sendKeys(name + Keys.ENTER);
         $(By.name("email")).sendKeys(email + Keys.ENTER);
-        new Select(getDriver().findElement(By.name("gender"))).selectByVisibleText("Парень");
-        new Select(getDriver().findElement(By.name("age"))).selectByVisibleText("25 лет");
-        $(byText("Зарегистрироваться")).click();
+        select("gender").selectByVisibleText(gender);
+        select("age").selectByVisibleText(age);
+        $(byXpath("Зарегистрироваться")).click();
     }
 
     @Step
     public static void assertTitleOpenedURL(String expectedTitle) {
-        new WebDriverWait(getDriver(), 6).until(titleContains(expectedTitle));
+        waitUntil().until(titleContains(expectedTitle));
     }
 }

@@ -1,27 +1,29 @@
 import org.junit.Test;
-import org.openqa.selenium.By;
 import testconfigs.BaseTest;
 import testdata.AccountData;
 
-import static core.ConciseAPI.$;
-import static core.ConciseAPI.byText;
+import static core.ConciseAPI.getUniqueText;
 import static pages.Flirchi.*;
 
 public class FlirchiTest extends BaseTest {
 
+    String email = getUniqueText("test", "@mail.ru");
+
+    String name = getUniqueText("test");
+
     @Test
-    public void registrationAtBoy() {
-        open("https://flirchi.com/landing/inter?fr=1&p=1232");
-        $(byText("Девушки")).click();
-        $(byText("Темные")).click();
-        $(By.xpath(".//*[@id='slide-03-f']/div/div[1]/a")).click();
-        $(byText("Стройная")).click();
-        signUp(AccountData.name, AccountData.email);
+    public void registrationAsBoy() {
+        recordingAnswer("Девушки", "slide-02-f", 1, "slide-03-f", 3, "Стройная");
+        signUp(name, email, AccountData.genderBoy, AccountData.age);
+
         assertTitleOpenedURL("Flirchi – сайт встреч! Общение без ограничений");
     }
 
     @Test
-    public void registrationAtGirl() {
+    public void registrationAsGirl() {
+        recordingAnswer("Парни", "slide-02-m", 1, "slide-03-m", 1, "Спортивная");
+        signUp(name, email, AccountData.genderGirl, AccountData.age);
 
+        assertTitleOpenedURL("Flirchi – сайт встреч! Общение без ограничений");
     }
 }
